@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation james</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+	var x,y;
+	var timer;
+	var map, infoWindow;
+	var newtext, text;
+	var location,test;
+	var directionsService,directionsDisplay;
+
+
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+
+      function initMap() {
+		
+		 main();
+	  }
+	  function getLocationData(file){
+	  
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var text = rawFile.responseText;
+				alert(text);
+				newtext = text.split(",");
+                
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+
+		
+		}
+		
+		
+	
+		
+	  //function getLocationData(callback){
+	  
+	  	//var iframe = document.createElement('iframe');
+		//iframe.id = 'iframe';
+		//iframe.style.display = 'none';
+		//document.body.appendChild(iframe);
+		//iframe.src = 'file.txt';
+		//setTimeout(function(){
+		//	text = document.getElementById('iframe').contentDocument.body.firstChild.innerHTML;
+		//	alert(text);
+		//	newtext = text.split(",");
+		//	callback(newtext);			
+		//}, 0);
+
+
+
+	function main(){
+	getLocationData("file:///C:/Users/James/Desktop/file.txt");
+	alert("waiting for coords");	
+	setTimeout(function(){ 	
+		
+		//while (newtext == undefined){
+		
+		//}
+		alert("should be x");
+		alert(newtext)
+		x = newtext[0];
+		y = newtext[1];
+		
+		
+		
+		
+		
+		directionsService = new google.maps.DirectionsService;
+        directionsDisplay = new google.maps.DirectionsRenderer;
+		
+		alert(x);
+		alert(y);
+		test = new google.maps.LatLng( x , y );
+		map = new google.maps.Map(document.getElementById('map'), {
+          center: test,
+          zoom: 19
+		  
+        });
+		
+		myloc = new google.maps.Marker({
+        map: map,
+        animation: google.maps.Animation.DROP,
+        position: test
+    });
+		
+		
+
+		
+
+	
+		
+		myloc.setPosition(test);
+		map.setCenter(test)
+		directionsDisplay.setMap(map);
+		calculateAndDisplayRoute(directionsService, directionsDisplay);
+		timer = setInterval(update, 5000);
+		},5000);
+		
+		}
+        
+		//while (1 < 2){
+		
+		//return new Promise(resolve => setTimeout(resolve, 2000));
+		//}
+        // Try HTML5 geolocation.
+        
+		var update = function(){	
+		console.log("here2");
+		getLocationData("file:///C:/Users/James/Desktop/file.txt");
+		x = newtext[0];
+		y = newtext[1];
+		
+		test = new google.maps.LatLng( x , y );
+		calculateAndDisplayRoute(directionsService, directionsDisplay);
+
+		if (text == "52.405371,-1.500315"){
+			console.log("dest reached");
+		}
+		
+		}
+		
+	      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        
+        directionsService.route({
+          origin: test,
+          destination: "52.405371,-1.500315",
+          travelMode: 'WALKING'
+		  
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFP-HtrnNBsR64QzlzZAmeEqye_jNieFw&callback=initMap">
+    </script>
+  </body>
+</html>
